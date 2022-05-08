@@ -95,6 +95,22 @@ def find_qr():
     cv.imwrite('./result.jpg', img_dst)
 
 
+def get_all_window_name():
+    hwnd_title = dict()
+    name = []
+
+    def get_all_hwnd(hwnd, mouse):
+        if win32gui.IsWindow(hwnd) and win32gui.IsWindowEnabled(hwnd) and win32gui.IsWindowVisible(hwnd):
+            hwnd_title.update({hwnd: win32gui.GetWindowText(hwnd)})
+
+    win32gui.EnumWindows(get_all_hwnd, 0)
+
+    for h, n in hwnd_title.items():
+        if n != '':
+            name.append(n)
+    return list(set(name))
+
+
 def receive_qr(name):
     screenshot(name)
     find_qr()
