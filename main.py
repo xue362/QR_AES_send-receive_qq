@@ -12,10 +12,9 @@ if __name__ == '__main__':
     try:
         with open('SETTINGS.txt', 'r', encoding='UTF-8') as file:
             f_list = file.readlines()
-            key, iv, window_name = f_list[0], f_list[1], f_list[2]
+            key, iv = f_list[0], f_list[1]
             key = key.replace('\n', '')
             iv = iv.replace('\n', '')
-            window_name = window_name.replace('\n', '')
     except:
         pass
 
@@ -28,12 +27,12 @@ if __name__ == '__main__':
     # 设置主窗口的背景颜色,颜色值可以是英文单词，或者颜色值的16进制数,除此之外还可以使用Tk内置的颜色常量
     root_window["background"] = "#C9C9C9"
     # 添加文本内,设置字体的前景色和背景色，和字体类型、大小
-    tk.Label(root_window, text="欢迎您", bg="yellow", fg="red", font=('Times', 20, 'bold')).grid(row=0, column=0)
+    tk.Label(root_window, text="欢迎您", bg="yellow", fg="red", font=('Times', 20, 'bold')).grid(row=0, column=1)
 
     text = tk.Text(root_window, width=55, height=35, undo=True, autoseparators=False, wrap='word')
     text.grid(row=1, column=0, rowspan=4, columnspan=4)
 
-    if (key, iv, window_name) == ('-1', '-1', '-1'):
+    if (len(key), len(iv)) != (16, 16):
         text.insert(tk.INSERT, '''
 配置有误，检查SETTING.txt
 
@@ -68,9 +67,12 @@ iv/偏移量  (16位)
     tk.Button(root_window, text='恢复', command=text.edit_redo).grid(row=4, column=5)
     tk.Button(root_window, text='加密发送', command=start).grid(row=6, column=1)
     tk.Button(root_window, text='接收解密', command=begin).grid(row=6, column=2)
+    tk.Label(root_window, text="key=" + key).grid(row=7, column=1)
+    tk.Label(root_window, text="iv=" + iv).grid(row=7, column=2)
 
     def refresh_name():
         c_box['value'] = SR.get_all_window_name()
+
     tk.Button(root_window, text='刷新', command=refresh_name).grid(row=0, column=3)
     c_box = ttk.Combobox(root_window)
     c_box.grid(row=0, column=2)
